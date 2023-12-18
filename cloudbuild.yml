@@ -23,7 +23,6 @@ steps:
         "deploy",
         "api-longga",
         "--image=gcr.io/valued-amp-385315/api-longga:${_MY_TAG}",
-        "--set-cloudsql-instances=valued-amp-385315:us-central1:erp",
         "--concurrency=100",
         "--allow-unauthenticated",
         "--port=8000",

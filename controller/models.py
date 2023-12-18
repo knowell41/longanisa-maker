@@ -5,16 +5,16 @@ from django.db import models
 
 class Flavor(models.Model):
     title = models.CharField(max_length=50, unique=True)
-    ingredient1 = models.CharField(max_length=50, unique=True)
-    ingredient2 = models.CharField(max_length=50, unique=True)
-    ingredient3 = models.CharField(max_length=50, unique=True)
-    ingredient4 = models.CharField(max_length=50, unique=True)
-    ingredient5 = models.CharField(max_length=50, unique=True)
-    amount1 = models.FloatField()
-    amount2 = models.FloatField()
-    amount3 = models.FloatField()
-    amount4 = models.FloatField()
-    amount5 = models.FloatField()
+    ingredient1 = models.CharField(max_length=50, null=True, blank=True)
+    ingredient2 = models.CharField(max_length=50, null=True, blank=True)
+    ingredient3 = models.CharField(max_length=50, null=True, blank=True)
+    ingredient4 = models.CharField(max_length=50, null=True, blank=True)
+    ingredient5 = models.CharField(max_length=50, null=True, blank=True)
+    amount1 = models.FloatField(null=True, blank=True)
+    amount2 = models.FloatField(null=True, blank=True)
+    amount3 = models.FloatField(null=True, blank=True)
+    amount4 = models.FloatField(null=True, blank=True)
+    amount5 = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return self.title

@@ -10,11 +10,11 @@ class Flavor(models.Model):
     ingredient3 = models.CharField(max_length=50, unique=True)
     ingredient4 = models.CharField(max_length=50, unique=True)
     ingredient5 = models.CharField(max_length=50, unique=True)
-    amount1 = models.IntegerField()
-    amount2 = models.IntegerField()
-    amount3 = models.IntegerField()
-    amount4 = models.IntegerField()
-    amount5 = models.IntegerField()
+    amount1 = models.FloatField()
+    amount2 = models.FloatField()
+    amount3 = models.FloatField()
+    amount4 = models.FloatField()
+    amount5 = models.FloatField()
 
     def __str__(self):
         return self.title

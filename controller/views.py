@@ -22,6 +22,13 @@ class ListFlavors(ListAPIView):
     queryset = Flavor.objects.all()
 
 
+class CreateFlavor(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = FlavorSerializer
+    queryset = Flavor.objects.all()
+    parser_classes = [MultiPartParser]
+
+
 class RetrieveFlavor(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = FlavorSerializer

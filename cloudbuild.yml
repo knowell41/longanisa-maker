@@ -1,0 +1,44 @@
+substitutions:
+  _MY_TAG: latest
+
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/valued-amp-385315/api-longga:${_MY_TAG}",
+        "-f",
+        "Dockerfile.django",
+        ".",
+      ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/valued-amp-385315/api-longga:${_MY_TAG}"]
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "api-longga",
+        "--image=gcr.io/valued-amp-385315/api-longga:${_MY_TAG}",
+        "--set-cloudsql-instances=valued-amp-385315:us-central1:erp",
+        "--concurrency=100",
+        "--allow-unauthenticated",
+        "--port=8000",
+        "--min-instances=0",
+        "--region=asia-southeast1",
+        "--project=valued-amp-385315",
+      ]
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "run",
+        "services",
+        "update-traffic",
+        "api-longga",
+        "--to-latest",
+        "--region=asia-southeast1",
+      ]

@@ -36,6 +36,9 @@ urlpatterns = [
     path("flavors/<int:pk>/update", UpdateFlavor.as_view()),
     path("flavors/<int:pk>/delete", DeleteFlavor.as_view()),
     path("status", AppStatus.as_view()),
+    path("dispense", Dispense.as_view()),
+    path("mixer", Mixer.as_view()),
+    path("grinder", Grinder.as_view()),
     path(
         "swagger",
         schema_view.with_ui("swagger", cache_timeout=0),

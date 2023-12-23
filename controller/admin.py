@@ -8,11 +8,6 @@ from .models import *
 class FlavorAdmin(admin.ModelAdmin):
     list_display = [
         "title",
-        "ingredient1",
-        "ingredient2",
-        "ingredient3",
-        "ingredient4",
-        "ingredient5",
         "amount1",
         "amount2",
         "amount3",

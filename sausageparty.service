@@ -1,0 +1,14 @@
+[Unit]
+Description=Longanisa Maker
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/longanisa-maker/entrypoint.sh
+Restart=always
+RestartSec=3
+User=pi
+WorkingDirectory=/path/to/working/directory
+
+[Install]
+WantedBy=multi-user.target

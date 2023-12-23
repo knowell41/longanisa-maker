@@ -31,6 +31,41 @@ try:
 except Exception as e:
     print(f"{e}")
 
+class ResetSerial(APIView):
+    global device
+
+    def post(self, request, *args, **kwargs):
+        try:
+            try:
+                device.close()
+            except:
+                pass
+            for i in range(255):
+                try:
+                    device.com = f"/dev/ttyUSB{i}"
+                    device.connect()
+                    break
+                except:
+                    continue
+
+            serial_info = {
+                "port": device.serial_com.name,
+                "baudrate": device.serial_com.baudrate,
+                "timeout": device.serial_com.timeout
+            }
+            return Response(serial_info, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": f"{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class PingSerial(APIView):
+    global device
+    def post(self, request, *args, **kwargs):
+        try:
+            device.connect()
+            return Response("CONNECTED", status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response("DISCONNECTED", status=status.HTTP_200_OK)
 
 class ListFlavors(ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -73,6 +108,45 @@ class AppStatus(APIView):
             return Response(
                 {"error": f"{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+class SetAppStatus(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser]
+    
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                name="status",
+                in_=openapi.IN_FORM,
+                type=openapi.TYPE_STRING,
+                description="Set status",
+                enum=["START", "STOP"],
+                required=False,
+            )
+        ]
+    )
+    def post(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            set_status = data.get("status")
+
+            app_status = AppSettings.objects.get(id=1)
+            
+            if set_status == "START":
+                app_status.systemStatus = "RUNNING"
+                app_status.save()
+                return Response("RUNNING", status=status.HTTP_200_OK)
+
+            if set_status == "STOP":
+                app_status.systemStatus = "STOPPED"
+                app_status.save()
+                return Response("STOPPED", status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            return Response({"error": f"{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            
+            
 
 
 class Dispense(APIView):

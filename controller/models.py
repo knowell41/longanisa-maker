@@ -38,11 +38,6 @@ class DeviceSettings(models.Model):
 
 class Flavor(models.Model):
     title = models.CharField(max_length=50, primary_key=True)
-    ingredient1 = models.CharField(max_length=50, null=True, blank=True)
-    ingredient2 = models.CharField(max_length=50, null=True, blank=True)
-    ingredient3 = models.CharField(max_length=50, null=True, blank=True)
-    ingredient4 = models.CharField(max_length=50, null=True, blank=True)
-    ingredient5 = models.CharField(max_length=50, null=True, blank=True)
     amount1 = models.FloatField(null=True, blank=True)
     amount2 = models.FloatField(null=True, blank=True)
     amount3 = models.FloatField(null=True, blank=True)

@@ -30,6 +30,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("reset/", ResetSerial.as_view()),
+    path("ping/", PingSerial.as_view()),
     path("flavors/", ListFlavors.as_view()),
     path("flavors/create", CreateFlavor.as_view()),
     path("flavors/<int:pk>", RetrieveFlavor.as_view()),

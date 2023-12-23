@@ -9,6 +9,7 @@ class ControlSystem:
         self.com = com
         self.baud = baud
         self.timeout = timeout
+        self.serial_com = None
 
     def connect(self):
         self.serial_com = serial.Serial(

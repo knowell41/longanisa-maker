@@ -5,7 +5,7 @@ import time
 
 
 class ControlSystem:
-    def __init__(self, com, baud, timeout=1) -> None:
+    def __init__(self, com=None, baud=9600, timeout=1) -> None:
         self.com = com
         self.baud = baud
         self.timeout = timeout

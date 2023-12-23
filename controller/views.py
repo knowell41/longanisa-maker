@@ -19,13 +19,11 @@ import time
 import threading
 
 device_instance = DeviceSettings.objects.all().first()
-device = None
+device = ControlSystem()
 try:
-    device = ControlSystem(
-        baud=device_instance.baudrate,
-        com=device_instance.com,
-        timeout=device_instance.timeout,
-    )
+    device.com = device.com
+    device.baud = device_instance.baudrate
+    device.timeout = device_instance.timeout
     device.connect()
     time.sleep(2)
 except Exception as e:
@@ -35,27 +33,27 @@ class ResetSerial(APIView):
     global device
 
     def post(self, request, *args, **kwargs):
+        # try:
         try:
+            device.close()
+        except:
+            pass
+        for i in range(255):
             try:
-                device.close()
+                device.com = f"/dev/ttyACM{i}"
+                device.connect()
+                break
             except:
-                pass
-            for i in range(255):
-                try:
-                    device.com = f"/dev/ttyUSB{i}"
-                    device.connect()
-                    break
-                except:
-                    continue
+                continue
 
-            serial_info = {
-                "port": device.serial_com.name,
-                "baudrate": device.serial_com.baudrate,
-                "timeout": device.serial_com.timeout
-            }
-            return Response(serial_info, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": f"{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        serial_info = {
+            "port": device.serial_com.name,
+            "baudrate": device.serial_com.baudrate,
+            "timeout": device.serial_com.timeout
+        }
+        return Response(serial_info, status=status.HTTP_200_OK)
+        # except Exception as e:
+        #     return Response({"error": f"{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class PingSerial(APIView):
     global device
@@ -262,7 +260,7 @@ class Dispense(APIView):
 
             time.sleep(1)
 
-            device.close()
+            # device.close()
 
     def dispense_condiment(self, device, pin, delay):
         if device:

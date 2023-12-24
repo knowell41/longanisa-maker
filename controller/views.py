@@ -21,13 +21,14 @@ import threading
 device_instance = DeviceSettings.objects.all().first()
 device = ControlSystem()
 try:
-    device.com = device.com
+    device.com = device_instance.com
     device.baud = device_instance.baudrate
     device.timeout = device_instance.timeout
     device.connect()
     time.sleep(2)
 except Exception as e:
     print(f"{e}")
+
 
 class ResetSerial(APIView):
     global device
@@ -43,20 +44,23 @@ class ResetSerial(APIView):
                 device.com = f"/dev/ttyACM{i}"
                 device.connect()
                 break
-            except:
+            except Exception as e:
+                print(f"{e}")
                 continue
 
         serial_info = {
             "port": device.serial_com.name,
             "baudrate": device.serial_com.baudrate,
-            "timeout": device.serial_com.timeout
+            "timeout": device.serial_com.timeout,
         }
         return Response(serial_info, status=status.HTTP_200_OK)
         # except Exception as e:
         #     return Response({"error": f"{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 class PingSerial(APIView):
     global device
+
     def post(self, request, *args, **kwargs):
         try:
             device.connect()
@@ -64,6 +68,7 @@ class PingSerial(APIView):
         except Exception as e:
             print(e)
             return Response("DISCONNECTED", status=status.HTTP_200_OK)
+
 
 class ListFlavors(ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -107,10 +112,11 @@ class AppStatus(APIView):
                 {"error": f"{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+
 class SetAppStatus(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser]
-    
+
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -129,7 +135,7 @@ class SetAppStatus(APIView):
             set_status = data.get("status")
 
             app_status = AppSettings.objects.get(id=1)
-            
+
             if set_status == "START":
                 app_status.systemStatus = "RUNNING"
                 app_status.save()
@@ -139,12 +145,11 @@ class SetAppStatus(APIView):
                 app_status.systemStatus = "STOPPED"
                 app_status.save()
                 return Response("STOPPED", status=status.HTTP_200_OK)
-            
-        except Exception as e:
-            return Response({"error": f"{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            
-            
+        except Exception as e:
+            return Response(
+                {"error": f"{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class Dispense(APIView):

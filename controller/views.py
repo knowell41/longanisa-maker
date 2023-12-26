@@ -17,6 +17,7 @@ from drf_yasg import openapi
 from .utils import ControlSystem
 import time
 import threading
+from django.views.decorators.csrf import csrf_exempt
 
 device_instance = DeviceSettings.objects.all().first()
 device = ControlSystem()
@@ -33,6 +34,7 @@ except Exception as e:
 class ResetSerial(APIView):
     global device
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         # try:
         try:
@@ -61,6 +63,7 @@ class ResetSerial(APIView):
 class PingSerial(APIView):
     global device
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         try:
             device.connect()
@@ -75,6 +78,10 @@ class ListFlavors(ListAPIView):
     serializer_class = FlavorSerializer
     queryset = Flavor.objects.all()
 
+    @csrf_exempt
+    def get(self, request, *args, **kwargs):
+        return super().get(request, args, kwargs)
+
 
 class CreateFlavor(CreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -82,17 +89,29 @@ class CreateFlavor(CreateAPIView):
     queryset = Flavor.objects.all()
     parser_classes = [MultiPartParser]
 
+    @csrf_exempt
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
 
 class RetrieveFlavor(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = FlavorSerializer
     queryset = Flavor.objects.all()
 
+    @csrf_exempt
+    def get(self, request, *args, **kwargs):
+        return super().get(request, args, kwargs)
+
 
 class DeleteFlavor(DestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = FlavorSerializer
     queryset = Flavor.objects.all()
+
+    @csrf_exempt
+    def delete(self, request, *args, **kwargs):
+        return super().get(request, args, kwargs)
 
 
 class UpdateFlavor(UpdateAPIView):
@@ -101,8 +120,13 @@ class UpdateFlavor(UpdateAPIView):
     queryset = Flavor.objects.all()
     http_method_names = ["patch"]
 
+    @csrf_exempt
+    def patch(self, request, *args, **kwargs):
+        return super().get(request, args, kwargs)
+
 
 class AppStatus(APIView):
+    @csrf_exempt
     def get(self, request, *args, **kwargs):
         try:
             app_status = AppSettings.objects.get(id=1)
@@ -117,6 +141,7 @@ class SetAppStatus(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser]
 
+    @csrf_exempt
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -161,6 +186,7 @@ class Dispense(APIView):
     for flavor in flavors_queryset:
         flavor_list.append(flavor.title)
 
+    @csrf_exempt
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -277,6 +303,7 @@ class Mixer(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser]
 
+    @csrf_exempt
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -314,6 +341,7 @@ class Grinder(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser]
 
+    @csrf_exempt
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(

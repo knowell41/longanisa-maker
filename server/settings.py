@@ -34,11 +34,11 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
 
 for i in range(1, 254):
-    CSRF_TRUSTED_ORIGINS.append(f"http://192.168.0.{i}:8083")
-    CORS_ALLOWED_ORIGINS.append(f"http://192.168.0.{i}:8083")
-    CORS_ORIGIN_WHITELIST.append(f"http://192.168.0.{i}:8083")
+    CSRF_TRUSTED_ORIGINS.append(f"http://192.168.0.{i}:8082")
+    CORS_ALLOWED_ORIGINS.append(f"http://192.168.0.{i}:8082")
+    CORS_ORIGIN_WHITELIST.append(f"http://192.168.0.{i}:8082")
 
-print(CSRF_TRUSTED_ORIGINS)
+test = [1, 2, 3]
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition

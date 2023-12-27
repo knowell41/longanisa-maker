@@ -20,6 +20,7 @@ class Actuator(models.Model):
     grinder3 = models.CharField(max_length=2)
     grinder4 = models.CharField(max_length=2)
     mixer = models.CharField(max_length=2)
+    tie = models.CharField(max_length=2)
 
 
 class DeviceSettings(models.Model):

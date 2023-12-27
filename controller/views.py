@@ -364,23 +364,61 @@ class Grinder(APIView):
                 if action == "ON":
                     grinder1 = actuator_instance.grinder1
                     device.on(pin=grinder1)
-                    grinder2 = actuator_instance.grinder2
-                    device.on(pin=grinder2)
-                    grinder3 = actuator_instance.grinder3
-                    device.on(pin=grinder3)
-                    grinder4 = actuator_instance.grinder4
-                    device.on(pin=grinder4)
+                    # grinder2 = actuator_instance.grinder2
+                    # device.on(pin=grinder2)
+                    # grinder3 = actuator_instance.grinder3
+                    # device.on(pin=grinder3)
+                    # grinder4 = actuator_instance.grinder4
+                    # device.on(pin=grinder4)
                     return Response("ON", status=status.HTTP_200_OK)
 
                 if action == "OFF":
                     grinder1 = actuator_instance.grinder1
                     device.off(pin=grinder1)
-                    grinder2 = actuator_instance.grinder2
-                    device.off(pin=grinder2)
-                    grinder3 = actuator_instance.grinder3
-                    device.off(pin=grinder3)
-                    grinder4 = actuator_instance.grinder4
-                    device.off(pin=grinder4)
+                    # grinder2 = actuator_instance.grinder2
+                    # device.off(pin=grinder2)
+                    # grinder3 = actuator_instance.grinder3
+                    # device.off(pin=grinder3)
+                    # grinder4 = actuator_instance.grinder4
+                    # device.off(pin=grinder4)
+                    return Response("OFF", status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response(
+                {"error": f"{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class Tie(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser]
+
+    @csrf_exempt
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                name="action",
+                in_=openapi.IN_FORM,
+                type=openapi.TYPE_STRING,
+                description="action",
+                enum=["ON", "OFF"],
+                required=False,
+            )
+        ]
+    )
+    def post(self, request, *args, **kwargs):
+        try:
+            if device:
+                actuator_instance = Actuator.objects.get(id=1)
+                data = request.data
+                action = data.get("action")
+                tie = actuator_instance.tie
+                if action == "ON":
+                    device.on(tie)
+                    return Response("ON", status=status.HTTP_200_OK)
+
+                if action == "OFF":
+                    device.off(tie)
                     return Response("OFF", status=status.HTTP_200_OK)
 
         except Exception as e:

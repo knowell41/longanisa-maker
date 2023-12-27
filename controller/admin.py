@@ -39,4 +39,5 @@ class ActuatorAdmin(admin.ModelAdmin):
         "grinder3",
         "grinder4",
         "mixer",
+        "tie",
     ]

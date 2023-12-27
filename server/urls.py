@@ -41,6 +41,7 @@ urlpatterns = [
     path("dispense", Dispense.as_view()),
     path("mixer", Mixer.as_view()),
     path("grinder", Grinder.as_view()),
+    path("tie", Grinder.as_view()),
     path(
         "swagger",
         schema_view.with_ui("swagger", cache_timeout=0),
